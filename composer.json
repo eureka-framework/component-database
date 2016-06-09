@@ -1,0 +1,28 @@
+{
+  "name": "eureka/component-database",
+  "description": "PHP database library.",
+  "type": "library",
+  "license": "MIT",
+
+  "authors": [
+    {
+      "name": "Romain Cottard",
+      "email": "",
+      "role": "Developer"
+    }
+
+  ],
+
+  "autoload": {
+    "psr-4": {
+      "Eureka\\Component\\Database": "./"
+    }
+  },
+
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/velkuns/component-database"
+    }
+  ]
+}
