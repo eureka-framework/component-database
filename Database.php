@@ -83,7 +83,7 @@ class Database
      */
     public function setConfig(array $config)
     {
-        $this->config  = $config;
+        $this->config += $config;
 
         return $this;
     }
@@ -161,6 +161,7 @@ class Database
         }
 
         $connection = new \PDO($config['dsn'], $config['user'], $config['pass'], $options);
+        $connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
         return $connection;
     }
