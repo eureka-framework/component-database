@@ -13,7 +13,6 @@ namespace Eureka\Component\Database;
  * Configuration class.
  *
  * @author Romain Cottard
- * @version 2.1.0
  */
 class Database
 {
@@ -39,8 +38,6 @@ class Database
 
     /**
      * Factory constructor.
-     *
-     * @return Database
      */
     protected function __construct()
     {
@@ -50,7 +47,7 @@ class Database
     /**
      * Get Factory instance (singleton)
      *
-     * @return $this
+     * @return self
      */
     public static function getInstance()
     {
@@ -72,14 +69,14 @@ class Database
      */
     public static function get($name = null)
     {
-        return Database::getInstance()->getConnection($name);
+        return self::getInstance()->getConnection($name);
     }
 
     /**
      * Set configuration
      *
      * @param  array $config
-     * @return $this
+     * @return self
      */
     public function setConfig(array $config)
     {
