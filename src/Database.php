@@ -1,7 +1,7 @@
 <?php
 
-/**
- * Copyright (c) 2010-2016 Romain Cottard
+/*
+ * Copyright (c) Romain Cottard
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,29 +16,22 @@ namespace Eureka\Component\Database;
  */
 class Database
 {
-    /**
-     * @var string ENGINE_PDO Engine PDO from native PHP class.
-     */
+    /** @var string ENGINE_PHP_PDO Engine PDO from native PHP class. */
     const ENGINE_PHP_PDO = 'PDO';
 
-    /**
-     * @var Database $instance Class instance (singleton)
-     */
+    /** @var string ENGINE_PHP_CONNECTION Engine Connection (extend PHP \PDO engine). */
+    const ENGINE_PHP_CONNECTION = 'Connection';
+
+    /** @var Database $instance Class instance (singleton) */
     protected static $instance = null;
 
-    /**
-     * @var array $config Configuration for database(s)
-     */
+    /** @var array $config Configuration for database(s) */
     protected $config = array();
 
-    /**
-     * @var array $connections List of instantiated connections
-     */
+    /** @var array $connections List of instantiated connections */
     protected $connections = array();
 
-    /**
-     * Factory constructor.
-     */
+    /** Factory constructor. */
     protected function __construct()
     {
         $this->connections = array();
@@ -47,7 +40,7 @@ class Database
     /**
      * Get Factory instance (singleton)
      *
-     * @return self
+     * @return $this
      */
     public static function getInstance()
     {
@@ -64,7 +57,7 @@ class Database
      * Get connection (short way)
      *
      * @param  string $name
-     * @return \PDO
+     * @return \PDO|Connection
      * @throws \Exception
      */
     public static function get($name = null)
@@ -76,7 +69,7 @@ class Database
      * Set configuration
      *
      * @param  array $config
-     * @return self
+     * @return $this
      */
     public function setConfig(array $config)
     {
@@ -89,7 +82,7 @@ class Database
      * Create or get existing connection.
      *
      * @param  string $name
-     * @return \PDO
+     * @return \PDO|Connection
      * @throws \Exception
      */
     public function getConnection($name = null)
@@ -110,7 +103,7 @@ class Database
         $engine = $this->config[$name]['engine'];
 
         if (!isset($this->connections[$engine][$name])) {
-            $method = 'get' . $engine;
+            $method = 'new' . $engine;
             if (!method_exists($this, $method)) {
                 throw new \Exception('Engine does not exists ! (engine: ' . $engine . ')');
             }
@@ -128,7 +121,7 @@ class Database
      * @return \PDO
      * @throws \Exception
      */
-    protected function getPDO($name)
+    protected function newPDO($name)
     {
         if (!isset($this->config[$name]) || !is_array($this->config[$name])) {
             throw new \Exception('Config not found ! (config: ' . $name . ')');
@@ -159,6 +152,49 @@ class Database
 
         $connection = new \PDO($config['dsn'], $config['user'], $config['pass'], $options);
         $connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
+        return $connection;
+    }
+
+    /**
+     * Create new PDO connection
+     *
+     * @param  string $name Config name
+     * @return Connection
+     * @throws \Exception
+     */
+    protected function newConnection($name)
+    {
+        if (!isset($this->config[$name]) || !is_array($this->config[$name])) {
+            throw new \Exception('Config not found ! (config: ' . $name . ')');
+        }
+
+        $config = $this->config[$name];
+
+        if (!isset($config['dsn'])) {
+            throw new \Exception('"dsn" parameter is not defined !');
+        }
+
+        if (!isset($config['user'])) {
+            throw new \Exception('"user" parameter is not defined !');
+        }
+
+        if (!isset($config['pass'])) {
+            throw new \Exception('"pass" parameter is not defined !');
+        }
+
+        $config['options'] = isset($config['options']) ? $config['options'] : array();
+
+        $options = array();
+        foreach ($config['options'] as $optionName => $value) {
+            if (0 === strpos($optionName, 'Connection::')) {
+                $options[constant('\Eureka\Component\Database\\' . $optionName)] = $value;
+            }
+        }
+
+        $connection = new Connection($config['dsn'], $config['user'], $config['pass'], $options);
+        $connection->setName($name);
+        $connection->setAttribute(Connection::ATTR_ERRMODE, Connection::ERRMODE_EXCEPTION);
 
         return $connection;
     }
