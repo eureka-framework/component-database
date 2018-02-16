@@ -192,9 +192,7 @@ class Database
             }
         }
 
-        $connection = new Connection($config['dsn'], $config['user'], $config['pass'], $options);
-        $connection->setName($name);
-        $connection->setAttribute(Connection::ATTR_ERRMODE, Connection::ERRMODE_EXCEPTION);
+        $connection = new Connection($config['dsn'], $config['user'], $config['pass'], $options, $name);
 
         return $connection;
     }
