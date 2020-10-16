@@ -38,6 +38,8 @@ class ConnectionFactory
 
     /**
      * @return void
+     *
+     * @codeCoverageIgnore
      */
     public function __destroy()
     {
