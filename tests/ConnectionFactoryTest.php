@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace Eureka\Component\Database\Tests;
 
-
 use Eureka\Component\Database\ConnectionFactory;
 use PHPUnit\Framework\TestCase;
 
