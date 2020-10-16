@@ -7,37 +7,33 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Eureka\Component\Database;
 
 /**
  * Class Connection
  *
  * @author  Romain Cottard
+ * @codeCoverageIgnore
  */
 class Connection extends \PDO
 {
     /** @var string $name */
-    private $name = '';
+    private string $name = '';
 
     /**
-     * Connection constructor.
+     * Class constructor.
      *
      * @param string $dsn
-     * @param string $username
-     * @param string $password
-     * @param array $options
+     * @param string|null $username
+     * @param string|null $password
+     * @param string|null $options
      * @param string $name
      */
-    public function __construct($dsn, $username, $password, $options, $name = 'common')
+    public function __construct(string $dsn, string $username = null, string $password = null, string $options = null, $name = 'common')
     {
-        $realOptions = [];
-        foreach ($options as $optionName => $value) {
-            if (0 === strpos($optionName, 'Connection::')) {
-                $realOptions[constant('\Eureka\Component\Database\\' . $optionName)] = $value;
-            }
-        }
-
-        parent::__construct($dsn, $username, $password, $realOptions);
+        parent::__construct($dsn, $username, $password, $options);
 
         $this->setName($name);
         $this->setAttribute(self::ATTR_ERRMODE, self::ERRMODE_EXCEPTION);
@@ -49,7 +45,7 @@ class Connection extends \PDO
      * @param  string $name
      * @return $this
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -61,16 +57,8 @@ class Connection extends \PDO
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasCountRows()
-    {
-        return false;
     }
 }

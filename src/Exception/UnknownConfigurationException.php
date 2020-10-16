@@ -7,13 +7,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Eureka\Component\Database;
+declare(strict_types=1);
+
+namespace Eureka\Component\Database\Exception;
 
 /**
- * Class to handle exception
+ * Class UnknownConfigurationException
  *
  * @author Romain Cottard
  */
-class ExceptionNoData extends \RuntimeException
+class UnknownConfigurationException extends \LogicException
 {
 }
