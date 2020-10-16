@@ -14,8 +14,11 @@
 
   "autoload": {
     "psr-4": {
-      "Eureka\\Component\\Database\\": "./src/Database/"
+      "Eureka\\Component\\Database\\": "./src"
     }
-  }
+  },
 
+  "require": {
+    "ext-pdo": "*"
+  }
 }

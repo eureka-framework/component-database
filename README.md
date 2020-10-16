@@ -1,2 +1,11 @@
 # component-database
-PHP Database abstraction (PDO)
+
+PHP Database abstraction
+
+## Usage
+```php
+<?php
+
+use Eureka\Database\Database;
+
+
