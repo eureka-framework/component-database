@@ -52,19 +52,25 @@ class ConnectionFactory
 
     /**
      * @param string $name
+     * @param bool $forceReconnection
      * @return Connection
      *
      * @codeCoverageIgnore
      */
-    public function getConnection(string $name): Connection
+    public function getConnection(string $name, bool $forceReconnection = false): Connection
     {
-        //~ Connection already set & id alive
-        if (isset(self::$connections[$name]) && self::$connections[$name]->query('SELECT 1') !== false) {
-            return self::$connections[$name];
-        }
-
         if (!isset($this->configs[$name])) {
             throw new UnknownConfigurationException('Configuration with name "' . $name . '" is unknown', 1000);
+        }
+
+        //~ Force unset to close existing connection & destroy instance if required
+        if ($forceReconnection) {
+            $this->closeConnection($name);
+        }
+
+        //~ Connection already set & id alive
+        if (isset(self::$connections[$name])) {
+            return self::$connections[$name];
         }
 
         //~ Create & store connection
