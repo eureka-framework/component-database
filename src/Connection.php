@@ -19,7 +19,6 @@ namespace Eureka\Component\Database;
  */
 class Connection extends \PDO
 {
-    /** @var string $name */
     private string $name = '';
 
     /**
@@ -28,11 +27,16 @@ class Connection extends \PDO
      * @param string $dsn
      * @param string|null $username
      * @param string|null $password
-     * @param array|null $options
+     * @param array<string|int>|null $options
      * @param string $name
      */
-    public function __construct(string $dsn, string $username = null, string $password = null, array $options = null, $name = 'common')
-    {
+    public function __construct(
+        string $dsn,
+        string $username = null,
+        string $password = null,
+        array $options = null,
+        string $name = 'common'
+    ) {
         parent::__construct($dsn, $username, $password, $options);
 
         $this->setName($name);
@@ -45,7 +49,7 @@ class Connection extends \PDO
      * @param  string $name
      * @return $this
      */
-    public function setName(string $name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 

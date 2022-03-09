@@ -23,13 +23,13 @@ class ConnectionFactory
     /** @var Connection[] $connections */
     private static array $connections = [];
 
-    /** @var array $configs */
+    /** @var array<string, array<string, string|array<string|int>>> $configs */
     private array $configs;
 
     /**
      * Class constructor.
      *
-     * @param array $configs
+     * @param array<string, array<string, string|array<string|int>>> $configs
      */
     public function __construct(array $configs)
     {
@@ -54,8 +54,6 @@ class ConnectionFactory
      * @param string $name
      * @param bool $forceReconnection
      * @return Connection
-     *
-     * @codeCoverageIgnore
      */
     public function getConnection(string $name, bool $forceReconnection = false): Connection
     {
@@ -65,24 +63,46 @@ class ConnectionFactory
 
         //~ Force unset to close existing connection & destroy instance if required
         if ($forceReconnection) {
-            $this->closeConnection($name);
+            $this->closeConnection($name); // @codeCoverageIgnore
         }
 
         //~ Connection already set & id alive
         if (isset(self::$connections[$name])) {
-            return self::$connections[$name];
+            return self::$connections[$name];  // @codeCoverageIgnore
+        }
+
+        $dsn = $this->configs[$name]['dsn'] ?? null;
+        if (empty($dsn) || !is_string($dsn)) {
+            throw new UnknownConfigurationException('Missing or not string value for "dsn" config', 1001);
+        }
+
+        $username = $this->configs[$name]['username'] ?? null;
+        if (!is_string($username) &&  $username !== null) {
+            throw new UnknownConfigurationException('Not string value for "username" config', 1002);
+        }
+
+        $password = $this->configs[$name]['password'] ?? null;
+        if (!is_string($password) &&  $password !== null) {
+            throw new UnknownConfigurationException('Not string value for "password" config', 1003);
+        }
+
+        $options = $this->configs[$name]['options'] ?? null;
+        if (!is_array($options) &&  $options !== null) {
+            throw new UnknownConfigurationException('Not array values for "options" config', 1004);
         }
 
         //~ Create & store connection
+        // @codeCoverageIgnoreStart
         self::$connections[$name] = new Connection(
-            $this->configs[$name]['dsn'],
-            $this->configs[$name]['username'] ?? null,
-            $this->configs[$name]['password'] ?? null,
-            $this->configs[$name]['options'] ?? null,
+            $dsn,
+            $username,
+            $password,
+            $options,
             $name,
         );
 
         return self::$connections[$name];
+        // @codeCoverageIgnoreEnd
     }
 
     /**
