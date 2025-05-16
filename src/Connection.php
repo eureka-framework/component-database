@@ -30,13 +30,8 @@ class Connection extends \PDO
      * @param array<string|int>|null $options
      * @param string $name
      */
-    public function __construct(
-        string $dsn,
-        string $username = null,
-        string $password = null,
-        array $options = null,
-        string $name = 'common'
-    ) {
+    public function __construct(string $dsn, ?string $username = null, ?string $password = null, ?array $options = null, string $name = 'common')
+    {
         parent::__construct($dsn, $username, $password, $options);
 
         $this->setName($name);
