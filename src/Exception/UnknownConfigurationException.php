@@ -16,6 +16,4 @@ namespace Eureka\Component\Database\Exception;
  *
  * @author Romain Cottard
  */
-class UnknownConfigurationException extends \LogicException
-{
-}
+class UnknownConfigurationException extends \LogicException {}

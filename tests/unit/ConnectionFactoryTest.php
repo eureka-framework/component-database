@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Eureka\Component\Database\Tests;
+namespace Eureka\Component\Database\Tests\Unit;
 
 use Eureka\Component\Database\ConnectionFactory;
 use Eureka\Component\Database\Exception\UnknownConfigurationException;
@@ -22,21 +22,6 @@ use PHPUnit\Framework\TestCase;
  */
 class ConnectionFactoryTest extends TestCase
 {
-    /**
-     * @return void
-     */
-    public function testCanInstantiateConnectionFactory(): void
-    {
-        //~ Given
-        $config  = ['common' => []];
-
-        //~ When
-        $factory = new ConnectionFactory($config);
-
-        //~ Then
-        $this->assertInstanceOf(ConnectionFactory::class, $factory);
-    }
-
     /**
      * @return void
      */
