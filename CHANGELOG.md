@@ -5,6 +5,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [4.0.0] - 2025-12-24
+[4.0.0]: https://github.com/eureka-framework/component-database/compare/3.4.0...4.0.0
+### Added
+- Add PHP 8.3+ only
+### Removed
+- Drop PHP 7.4 support
+- Drop PHP 8.1 support
+- Drop PHP 8.2 support
+### Changed
+- Use PER Code Style 3.0
+- Update CI config
+
+
 ## [3.4.0] - 2025-05-16
 [3.4.0]: https://github.com/eureka-framework/component-database/compare/3.3.0...3.4.0
 ### Changed
