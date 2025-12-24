@@ -5,7 +5,6 @@ composer.lock
 
 #~ Tests
 /build/*
-.phpunit.result.cache
 
 #~ Misc
 .idea
